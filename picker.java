@@ -26,7 +26,7 @@ public class picker extends JFrame{
     private JLabel displayGauss = new JLabel("" + selection);
     private JLabel closeToZero = new JLabel();
     private Random pick = new Random();
-    private Timer nelly = new Timer();
+    private Timer gaussTimer = new Timer();
     
     Color purple = Color.decode("#800080"); //Purple appears for numbers beginning with -5 or below (Extremely rare)
     Color maroon = Color.decode("#B22222"); //Maroon appears for numbers beginning with -4 (Very rare)
@@ -44,14 +44,14 @@ public class picker extends JFrame{
     
     public picker()
     {
-        super("Gaussian Color Picker");
+        super("Gaussian Color Picker"); //The title of the window
         JPanel p = new JPanel();
-        getContentPane().add(p);
+        getContentPane().add(p); //Adds the panel to the window to make the contents visible
         
         newColor = new JButton("New Gaussian"); //This button allows the user to get a new color immediately
         
-        p.setLayout(null);
-        newColor.setBounds(70, 50, 250, 100);
+        p.setLayout(null); //This allows the location of each element to be set manually
+        newColor.setBounds(70, 50, 250, 100); //X coordinate, Y coordinate, width, and height
         p.add(newColor);
         
         displayGauss.setFont(new Font("Serif", Font.BOLD, 24)); //Shows the number that has been selected
@@ -65,10 +65,10 @@ public class picker extends JFrame{
         closeToZero.setBounds(330, 50, 200, 80);
         p.add(closeToZero);
         
-        HandlerClass handoraa = new HandlerClass();
-        newColor.addActionListener(handoraa);
+        HandlerClass handler = new HandlerClass();
+        newColor.addActionListener(handler);
         
-        nelly.schedule(new gaussClass(), 0, 1 * 5000); //A new number will be selected every 5000 milliseconds (5 seconds)
+        gaussTimer.schedule(new gaussClass(), 0, 1 * 5000); //A new number will be selected every 5000 milliseconds (5 seconds)
     }
     
     //This class implements the newColor button. When clicked, the timer resets. Note that an iteration of gaussClass is immediately run (i.e. a number is selected)
@@ -76,9 +76,9 @@ public class picker extends JFrame{
     {
         public void actionPerformed(ActionEvent event) //Normally a block such as (if event.getSource() == <button>) would be required, but only one button exists here.
         {
-            nelly.cancel();
-            nelly = new Timer();
-            nelly.schedule(new gaussClass(), 0, 1 * 5000);
+            gaussTimer.cancel();
+            gaussTimer = new Timer();
+            gaussTimer.schedule(new gaussClass(), 0, 1 * 5000);
         }
     }
     
@@ -174,7 +174,7 @@ public class picker extends JFrame{
     
     private class gaussClass extends TimerTask
     {
-        public void run() //This block occurs at the interval specified by 'nelly.schedule'
+        public void run() //This block occurs at the interval specified by 'gaussTimer.schedule'
         {
            getGauss();
         }
