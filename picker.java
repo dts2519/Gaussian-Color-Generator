@@ -174,7 +174,7 @@ public class picker extends JFrame{
     
     private class gaussClass extends TimerTask
     {
-        public void run() //This block occurs at the interval specified by 'new Timer'
+        public void run() //This block occurs at the interval specified by 'nelly.schedule'
         {
            getGauss();
         }
