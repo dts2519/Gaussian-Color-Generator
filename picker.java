@@ -1,3 +1,8 @@
+/*
+When choosing a Gaussian number, the generator utilizes a statistical bell curve; numbers closer to 0 are more common, 
+and numbers away from 0 are less common. Therefore, some colors will be more common than others.
+*/
+
 package gaussmancolor;
 
 import java.awt.*;
@@ -23,19 +28,19 @@ public class picker extends JFrame{
     private Random pick = new Random();
     private Timer nelly = new Timer();
     
-    Color purple = Color.decode("#800080");
-    Color maroon = Color.decode("#B22222");
-    Color red = Color.decode("#FF0000");
-    Color orange = Color.decode("#FF8C00");
-    Color gold = Color.decode("#FFD700");
-    Color yellow = Color.decode("#FFFF00");
-    Color beige = Color.decode("#F5F5DC");
-    Color lime = Color.decode("#ADFF2F");
-    Color cyan = Color.decode("#66CDAA");
-    Color blue = Color.decode("#1E90FF");
-    Color indigo = Color.decode("#6A5ACD");
-    Color violet = Color.decode("#EE82EE");
-    Color pink = Color.decode("#FF69B4");
+    Color purple = Color.decode("#800080"); //Purple appears for numbers beginning with -5 or below (Extremely rare)
+    Color maroon = Color.decode("#B22222"); //Maroon appears for numbers beginning with -4 (Very rare)
+    Color red = Color.decode("#FF0000"); //Red appears for numbers beginning with -3 (Rare)
+    Color orange = Color.decode("#FF8C00"); //Orange appears for numbers beginning with -2
+    Color gold = Color.decode("#FFD700"); //Gold appears for numbers beginning with -1
+    Color yellow = Color.decode("#FFFF00"); //Yellow appears for numbers beginning with -0
+    Color beige = Color.decode("#F5F5DC"); //Beige appears if the number is exactly 0 (Virtually guaranteed to never happen)
+    Color lime = Color.decode("#ADFF2F"); //Lime appears for numbers beginning with 0
+    Color cyan = Color.decode("#66CDAA"); //Cyan appears for numbers beginning with 1
+    Color blue = Color.decode("#1E90FF"); //Blue appears for numbers beginning with 2
+    Color indigo = Color.decode("#6A5ACD"); //Indigo appears for numbers beginning with 3 (Rare)
+    Color violet = Color.decode("#EE82EE"); //Violet appears for numbers beginning with 4 (Very rare)
+    Color pink = Color.decode("#FF69B4"); //Pink appears for numbers beginning with 5 or above (Extremely rare)
     
     public picker()
     {
@@ -43,14 +48,13 @@ public class picker extends JFrame{
         JPanel p = new JPanel();
         getContentPane().add(p);
         
-        newColor = new JButton("New Gaussian");
-        
+        newColor = new JButton("New Gaussian"); //This button allows the user to get a new color immediately
         
         p.setLayout(null);
         newColor.setBounds(70, 50, 250, 100);
         p.add(newColor);
         
-        displayGauss.setFont(new Font("Serif", Font.BOLD, 24));
+        displayGauss.setFont(new Font("Serif", Font.BOLD, 24)); //Shows the number that has been selected
         displayGauss.setBackground(beige);
         displayGauss.setOpaque(true);
         displayGauss.setBounds(70, 10, 250, 40);
@@ -64,17 +68,21 @@ public class picker extends JFrame{
         HandlerClass handoraa = new HandlerClass();
         newColor.addActionListener(handoraa);
         
-        nelly.schedule(new gaussClass(), 0, 1 * 5000);
+        nelly.schedule(new gaussClass(), 0, 1 * 5000); //A new number will be selected every 5000 milliseconds (5 seconds)
     }
+    
+    //This class implements the newColor button. When clicked, the timer resets. Note that an iteration of gaussClass is immediately run (i.e. a number is selected)
     private class HandlerClass implements ActionListener
     {
-        public void actionPerformed(ActionEvent event)
+        public void actionPerformed(ActionEvent event) //Normally a block such as (if event.getSource() == <button>) would be required, but only one button exists here.
         {
             nelly.cancel();
             nelly = new Timer();
             nelly.schedule(new gaussClass(), 0, 1 * 5000);
         }
     }
+    
+    //Gets the next number and changes the background to one of the colors declared above
     public void getGauss()
     {
         selection = pick.nextGaussian();
@@ -103,7 +111,7 @@ public class picker extends JFrame{
         {
             displayGauss.setBackground(yellow);  
         }
-        else if (selection == 0.0) //there is absolutely no way this will happen
+        else if (selection == 0.0) //Virtually guaranteed to never happen
         {
             displayGauss.setBackground(beige);  
         }
@@ -133,12 +141,13 @@ public class picker extends JFrame{
         }
         displayGauss.setText("" + selection);
         
-        if ((selection > -3 && selection <= -1.5) || (selection >= 1.5 && selection < 3 ))
+        //System displays numbers which are at least 1.5 units from 0, but continues selecting numbers
+        if ((selection > -3 && selection <= -1.5) || (selection >= 1.5 && selection < 3 )) 
         {
             System.out.println("Uncommon number found: " + selection);
         }
         
-        if (Math.abs(selection) < 0.001)
+        if (Math.abs(selection) < 0.001) //Selection stops if the number selected is within one thousandth of 0
         {
             System.out.println("Rare number found: " + selection); 
             System.out.println("Sleeping for one hour.");
@@ -150,7 +159,7 @@ public class picker extends JFrame{
             }
         }
         
-        if (selection <= -3 || selection >= 3)
+        if (selection <= -3 || selection >= 3) //Selection stops if the ones place of the number is 3 or higher
         {
             System.out.println("Rare number found: " + selection); 
             System.out.println("Sleeping for one hour.");
@@ -165,7 +174,7 @@ public class picker extends JFrame{
     
     private class gaussClass extends TimerTask
     {
-        public void run()
+        public void run() //This block occurs at the interval specified by 'new Timer'
         {
            getGauss();
         }
