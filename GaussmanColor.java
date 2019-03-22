@@ -1,3 +1,5 @@
+//The purpose of this file is simply to open the window and set the parameters for the frame.
+
 package gaussmancolor;
 
 import javax.swing.JFrame;
